@@ -29,9 +29,8 @@ async function execCommand(laCommande) {
                 laCommande = `taskkill /pid ${laCommande.slice(7)}`;
             }else if (laCommande.slice(0, 5) === 'lance'){
                 laCommande =`start ${laCommande.slice(5)}`;
-            }else{
-                console.log("Mauvaise commande");
-                return reject();
+            }else if (!laCommande){
+                return reject("");
             }
         } else {
         if (os.platform() === "linux") {
@@ -56,8 +55,7 @@ async function execCommand(laCommande) {
                 console.log("- lance [nom de l'application] : lance  l'application desirée");
                 console.log("- [commande]! (Linux uniquement) : lance l'application en arrière-plan");
                 return reject("");
-            }else{
-                console.log("Mauvaise commande");
+            }else if (!laCommande){
                 return reject("");
             }
         }}
@@ -82,6 +80,7 @@ async function main() {
             let response = await new Promise(resolve => rl.question('> ', resolve));
             // Exécuter la commande entrée par l'utilisateur
             let result = await execCommand(response);
+
             // Afficher le résultat de la commande
             console.log(result.stdout);
         } catch (error) {
